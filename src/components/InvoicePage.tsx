@@ -19,10 +19,10 @@ Font.register({
   family: 'Roboto Slab',
   fonts: [
     {
-      src: '/fonts/RobotoSlab-Regular.ttf',
+      src: '/invoice-generator/fonts/RobotoSlab-Regular.ttf',
     },
     {
-      src: '/fonts/RobotoSlab-Bold.ttf',
+      src: '/invoice-generator/fonts/RobotoSlab-Bold.ttf',
       fontWeight: 700,
     },
   ],
