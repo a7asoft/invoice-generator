@@ -35,7 +35,16 @@ interface Props {
 }
 
 const InvoicePage: FC<Props> = ({ data, pdfMode, onChange }) => {
-  const [invoice, setInvoice] = useState<Invoice>(data ? { ...data } : { ...initialInvoice })
+  // Si estamos en modo PDF, usar directamente los datos proporcionados sin estado local
+  // Esto asegura que siempre usemos los datos más actualizados para el PDF
+  const [invoice, setInvoice] = useState<Invoice>(data ? JSON.parse(JSON.stringify(data)) : { ...initialInvoice })
+  
+  // Actualizar el estado local cuando cambian los datos de entrada (especialmente importante para el modo PDF)
+  useEffect(() => {
+    if (data) {
+      setInvoice(JSON.parse(JSON.stringify(data)))
+    }
+  }, [data])
   const [subTotal, setSubTotal] = useState<number>()
   const [saleTax, setSaleTax] = useState<number>()
 

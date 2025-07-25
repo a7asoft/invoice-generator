@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { Invoice, TInvoice } from '../data/types'
 import { useDebounce } from '@uidotdev/usehooks'
@@ -11,7 +11,15 @@ interface Props {
 }
 
 const Download: FC<Props> = ({ data, setData }) => {
+  // Mantener una copia sincronizada de los datos para el PDF
+  const [pdfData, setPdfData] = useState<Invoice>({...data})
   const debounced = useDebounce(data, 500)
+  
+  // Actualizar los datos del PDF cuando cambian los datos de entrada
+  useEffect(() => {
+    console.log('Actualizando datos del PDF:', data);
+    setPdfData(JSON.parse(JSON.stringify(data))) // Copia profunda para asegurar que todos los datos se copien correctamente
+  }, [data])
 
   function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files?.length) return
@@ -48,7 +56,7 @@ const Download: FC<Props> = ({ data, setData }) => {
     <div className={'download-pdf '}>
       <PDFDownloadLink
         key="pdf"
-        document={<InvoicePage pdfMode={true} data={debounced} />}
+        document={<InvoicePage pdfMode={true} data={pdfData} />}
         fileName={`${title}.pdf`}
         aria-label="Save PDF"
         title="Save PDF"
